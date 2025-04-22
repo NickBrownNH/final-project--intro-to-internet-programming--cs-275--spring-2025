@@ -1,0 +1,11 @@
+{
+  "name": "final-project--intro-to-internet-programming--cs-275--spring-2025",
+  "version": "1.0.0",
+  "description": "Final Project for Intro. to Internet Programming.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nicholas Brown",
+  "license": "ISC"
+}

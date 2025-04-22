@@ -18,7 +18,7 @@ Before you begin, **update Node, NPM, ESLint, and Stylelint**
 
 ### General
 
-* There should not be any scroll bars on the page, either horizontal or vertical.
+* There should not be any scroll bars on the page - horizontal.
 * Author your code according to the included `.editorconfig` rules. (**Do not alter**.)
 * Validate/lint JavaScript according to the included `.eslintrc` rules. (**Do not alter**.)
 * Validate/lint CSS according to the included `.stylelintrc.json` rules. (**Do not alter**.)
