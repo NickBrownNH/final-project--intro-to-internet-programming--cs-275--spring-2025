@@ -26,7 +26,7 @@ Before you begin, **update Node, NPM, ESLint, and Stylelint**
 
 ### HTML
 
-* Include the following minimal HTML required for this project in `app/index.html`:
+* Include the following minimal HTML required for this project in `app/html/index.html`:
 
 ```html
 <!DOCTYPE html>
