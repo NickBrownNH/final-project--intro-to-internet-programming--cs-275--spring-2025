@@ -2,7 +2,8 @@ const {src, dest, watch, series} = require(`gulp`),
     htmlCompressor = require(`gulp-htmlmin`),
     htmlValidator = require(`gulp-html`),
     CSSLinter = require(`gulp-stylelint`),
-    csso = require(`gulp-csso`);
+    csso = require(`gulp-csso`),
+    jsLinter = require(`gulp-eslint`);
 
 
 let compressHTML = () => {
@@ -34,9 +35,16 @@ let compileCSSForProd = () => {
         .on(`end`, () => {
             console.log(`CSS minification complete. Files saved to prod/styles`);
         });
-}
+};
+
+let lintJS = () => {
+    return src(`app/js/*.js`)
+        .pipe(jsLinter())
+        .pipe(jsLinter.formatEach(`compact`));
+};
 
 exports.compressHTML = compressHTML;
 exports.validateHTML = validateHTML;
 exports.lintCSS = lintCSS;
 exports.compileCSSForProd = compileCSSForProd;
+exports.lintJS = lintJS;
