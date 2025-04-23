@@ -118,3 +118,10 @@ exports.transpileJSForDev = transpileJSForDev;
 exports.transpileJSForProd = transpileJSForProd;
 exports.serve = serve;
 exports.clean = clean;
+exports.build = series(
+    clean,
+    compressHTML,
+    compileCSSForProd,
+    transpileJSForProd
+);
+exports.default = serve;
