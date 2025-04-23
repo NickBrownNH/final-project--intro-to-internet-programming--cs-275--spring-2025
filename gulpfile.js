@@ -5,7 +5,9 @@ const {src, dest, watch, series} = require(`gulp`),
     csso = require(`gulp-csso`),
     jsLinter = require(`gulp-eslint`),
     jsCompressor = require(`gulp-uglify`),
-    babel = require(`gulp-babel`);
+    babel = require(`gulp-babel`),
+    browserSync = require(`browser-sync`),
+    reload = browserSync.reload;
 
 let compressHTML = () => {
     return src(`app/html/*.html`)
@@ -63,6 +65,30 @@ let transpileJSForProd = () => {
         .pipe(dest(`prod/js`));
 };
 
+let serve = () => {
+    browserSync({
+        notify: true,
+        reloadDelay: 50,
+        browser: `default`,
+        server: {
+            baseDir: [
+                `temp`,
+                `./app`,
+                `./app/html`,
+            ]
+        }
+    });
+
+    watch(`app/js/*.js`, series(lintJS, transpileJSForDev))
+        .on(`change`, reload);
+
+    watch(`app/css/*.css`, lintCSS)
+        .on(`change`, reload);
+
+    watch(`app/html/*.html`, validateHTML)
+        .on(`change`, reload);
+};
+
 exports.compressHTML = compressHTML;
 exports.validateHTML = validateHTML;
 exports.lintCSS = lintCSS;
@@ -70,3 +96,4 @@ exports.compileCSSForProd = compileCSSForProd;
 exports.lintJS = lintJS;
 exports.transpileJSForDev = transpileJSForDev;
 exports.transpileJSForProd = transpileJSForProd;
+exports.serve = serve;
