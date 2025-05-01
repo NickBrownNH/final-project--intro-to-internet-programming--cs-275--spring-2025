@@ -3,3 +3,10 @@
   font-size: 16px;
   line-height: 1ch;
 }
+
+div {
+  display: inline-block;
+  height: auto; /* Ensures the height adjusts to fit the content */
+  outline: 2px solid black; /* Adds a black outline with 2px thickness */
+  padding-inline: 20px; /* Optional: Adds some spacing inside the div */
+}

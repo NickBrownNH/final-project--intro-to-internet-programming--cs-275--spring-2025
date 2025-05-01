@@ -58,7 +58,7 @@ let transpileJSForDev = () => {
         });
 };
 
-let transpileJSForProd = () => {
+let transpileJSForProd = () => { //Split the transpile and compression tasks for production (use in series instead)
     return src(`app/js/*.js`)
         .pipe(babel())
         .pipe(jsCompressor())
@@ -90,7 +90,7 @@ let serve = () => {
 };
 
 async function clean() {
-    const { deleteAsync } = await import(`del`);
+    const { deleteAsync } = await require(`del`);
     let fs = require(`fs`),
         foldersToDelete = [`./temp`, `prod`];
 
