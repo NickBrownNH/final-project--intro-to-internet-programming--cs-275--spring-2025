@@ -1,7 +1,3 @@
-let a = 10;
-// This is a comment
-console.log(a);
-
 const size = Number(
     window.prompt(
         `Enter the size of the diamond (number of asterisks in the widest row):`
@@ -14,28 +10,24 @@ if (isNaN(size) || size <= 0) {
     let diamond = ``;
 
     if (size % 2 === 0) {
-        // Generate the top half of the diamond (including the middle row)
         for (let i = 1; i <= size; i++) {
             const spaces = ` `.repeat(size - i);
             const asterisks = `* `.repeat(i).trim();
             diamond += `${spaces}${asterisks}<br>`;
         }
 
-        // Generate the bottom half of the diamond
         for (let i = size - 1; i >= 1; i--) {
             const spaces = ` `.repeat(size - i);
             const asterisks = `* `.repeat(i).trim();
             diamond += `${spaces}${asterisks}<br>`;
         }
     } else {
-        // Generate the top half of the diamond (including the middle row)
         for (let i = 1; i <= size; i += 2) {
             const spaces = ` `.repeat((size - i) / 2);
             const asterisks = `*`.repeat(i);
             diamond += `${spaces}${asterisks}<br>`;
         }
 
-        // Generate the bottom half of the diamond
         for (let i = size - 2; i >= 1; i -= 2) {
             const spaces = ` `.repeat((size - i) / 2);
             const asterisks = `*`.repeat(i);
@@ -45,3 +37,26 @@ if (isNaN(size) || size <= 0) {
 
     document.getElementById(`diamond-container`).innerHTML = `<pre>${diamond}</pre>`;
 }
+
+const diamondContainer = document.getElementById(`diamond-container`);
+
+let position = 0;
+let direction = 1;
+const speed = 10;
+
+function animate() {
+    const containerWidth = diamondContainer.offsetWidth;
+    const viewportWidth = window.innerWidth;
+
+    position += speed * direction;
+
+    if (position + containerWidth+30 >= viewportWidth || position <= 0) {
+        direction *= -1;
+    }
+
+    diamondContainer.style.transform = `translateX(${position}px)`;
+
+    requestAnimationFrame(animate);
+}
+
+animate();

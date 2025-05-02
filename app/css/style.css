@@ -4,9 +4,10 @@
   line-height: 1ch;
 }
 
-div {
+#diamond-container {
+  outline: 2px solid black;
+  padding-inline: 20px;
   display: inline-block;
-  height: auto; /* Ensures the height adjusts to fit the content */
-  outline: 2px solid black; /* Adds a black outline with 2px thickness */
-  padding-inline: 20px; /* Optional: Adds some spacing inside the div */
+  height: auto;
+  position: relative;
 }
