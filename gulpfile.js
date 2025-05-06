@@ -6,13 +6,14 @@ const {src, dest, watch, series} = require(`gulp`),
     jsLinter = require(`gulp-eslint`),
     jsCompressor = require(`gulp-uglify`),
     babel = require(`gulp-babel`),
+    deleteAsync = require(`del`),
     browserSync = require(`browser-sync`),
     reload = browserSync.reload;
 
 let compressHTML = () => {
     return src(`app/html/*.html`)
         .pipe(htmlCompressor({ collapseWhitespace: true }))
-        .pipe(dest(`prod/html/`));
+        .pipe(dest(`prod`));
 };
 
 let validateHTML = () => {
@@ -34,9 +35,9 @@ let compileCSSForProd = () => {
     console.log(`Minifying CSS...`);
     return src(`./app/css/*.css`)
         .pipe(csso())
-        .pipe(dest(`prod/styles`))
+        .pipe(dest(`prod/css`))
         .on(`end`, () => {
-            console.log(`CSS minification complete. Files saved to prod/styles`);
+            console.log(`CSS minification complete. Files saved to prod/css`);
         });
 };
 
@@ -58,11 +59,23 @@ let transpileJSForDev = () => {
         });
 };
 
-let transpileJSForProd = () => { //Split the transpile and compression tasks for production (use in series instead)
+let transpileJS = () => {
     return src(`app/js/*.js`)
         .pipe(babel())
+        .on(`error`, (err) => {
+            console.error(`Babel error:`, err);
+        })
+        .pipe(dest(`temp/js`));
+};
+
+let compressJSForProd = () => {
+    console.log(`Compressing JavaScript...`);
+    return src(`./temp/js/*.js`)
         .pipe(jsCompressor())
-        .pipe(dest(`prod/js`));
+        .pipe(dest(`prod/js`))
+        .on(`end`, () => {
+            console.log(`JavaScript compression complete. Files saved to prod/js`);
+        });
 };
 
 let serve = () => {
@@ -90,23 +103,9 @@ let serve = () => {
 };
 
 async function clean() {
-    const { deleteAsync } = await require(`del`);
-    let fs = require(`fs`),
-        foldersToDelete = [`./temp`, `prod`];
+    const foldersToDelete = await deleteAsync([`./temp`, `prod`]);
 
-    for (let folder of foldersToDelete) {
-        try {
-            fs.accessSync(folder, fs.F_OK);
-            process.stdout.write(`\n\tThe ${folder} directory was found and will be deleted.\n`);
-        } catch (e) {
-            process.stdout.write(`\n\tThe ${folder} directory does NOT exist or is NOT accessible.\n`);
-            continue;
-        }
-
-        await deleteAsync(folder);
-    }
-
-    process.stdout.write(`\n`);
+    console.log(`The following directories were deleted:`, foldersToDelete);
 }
 
 exports.compressHTML = compressHTML;
@@ -115,13 +114,13 @@ exports.lintCSS = lintCSS;
 exports.compileCSSForProd = compileCSSForProd;
 exports.lintJS = lintJS;
 exports.transpileJSForDev = transpileJSForDev;
-exports.transpileJSForProd = transpileJSForProd;
+exports.transpileJS = transpileJS;
 exports.serve = serve;
 exports.clean = clean;
 exports.build = series(
-    clean,
     compressHTML,
     compileCSSForProd,
-    transpileJSForProd
+    transpileJS,
+    compressJSForProd
 );
 exports.default = serve;
